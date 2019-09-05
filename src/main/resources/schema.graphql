@@ -1,0 +1,35 @@
+type Query {
+    customer(id: ID): Customer,
+    card(id: ID): Card,
+    board(id: ID): Board,
+    allCustomerBoards(customerId: ID): [Board]
+}
+
+type Customer {
+    id: ID,
+    firstName: String!,
+    lastName: String!,
+    email: String!,
+    login: String!,
+}
+
+type Card {
+    id: ID,
+    name: String!,
+    description: String!,
+    owner: Customer,
+}
+
+type CardList {
+    id: ID,
+    name: String,
+    cards: [Card],
+    owner: Customer
+}
+
+type Board {
+    id: ID,
+    name: String,
+    owner: Customer
+    cardLists: [CardList]
+}
