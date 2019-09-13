@@ -1,23 +1,61 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
 type Query {
-    customer(id: ID): Customer,
-    card(id: ID): Card,
-    board(id: ID): Board,
-    allCustomerBoards(customerId: ID): [Board]
+    customer(id: ID!): Customer,
+    card(id: ID!): Card,
+    board(id: ID!): Board,
+    allCustomerBoards(customerId: ID!): [Board]
+}
+
+type Mutation {
+    addCustomer(input: CustomerInput!): Customer
+    updateCustomer(id: ID!, input: CustomerInput!): Customer
+
+    addCard(input: CardInput!): Card
+    updateCard(id: ID!, input: CardInput!): Card
+    moveCardToOtherList(cardId: ID!, cardListId: ID!): Card
+    moveCardAboveOtherCard(sourceId: ID!, targetId: ID!): Board
+
+    addBoard(input: BoardInput!): Board
+    updateBoard(id: ID!, input: BoardInput!): Board
+}
+
+input CustomerInput {
+    firstName: String
+    lastName: String
+    email: String
+    login: String
+}
+
+input CardInput {
+    title: String
+    description: String
+    cardListId: ID
+    ownerId: ID
+}
+
+input BoardInput {
+    name: String
+    ownerId: ID
 }
 
 type Customer {
     id: ID,
-    firstName: String!,
-    lastName: String!,
-    email: String!,
-    login: String!,
+    firstName: String,
+    lastName: String,
+    email: String,
+    login: String,
 }
 
 type Card {
     id: ID,
-    name: String!,
-    description: String!,
+    title: String,
+    description: String,
     owner: Customer,
+    cardListId: ID
 }
 
 type CardList {

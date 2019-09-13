@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Daniel Zawlocki
@@ -31,7 +31,7 @@ public class CardList {
 
     @Column
     @OneToMany(mappedBy = "cardListId")
-    private List<Card> cards = new ArrayList<>();
+    private Set<Card> cards = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "owner_id")

@@ -33,6 +33,9 @@ public class Card {
     @Column
     private Integer cardListId;
 
+    @Column(nullable = false)
+    private Integer sort = 1;
+
     @OneToOne
     @JoinColumn(name = "owner_id")
     private Customer owner;
@@ -52,5 +55,6 @@ public class Card {
         }
 
         setCardListId(cardList.getId());
+        cardList.addCard(this);
     }
 }

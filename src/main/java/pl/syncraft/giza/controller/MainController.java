@@ -19,8 +19,8 @@ public class MainController {
 
     @PostMapping
     @CrossOrigin
-    public ResponseEntity<Object> query(@RequestBody String query) {
-        ExecutionResult result = graphQLService.getGraphQL().execute(query);
+    public ResponseEntity<Object> query(@RequestBody GraphQLDto query) {
+        ExecutionResult result = graphQLService.getGraphQL().execute(query.getQuery());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

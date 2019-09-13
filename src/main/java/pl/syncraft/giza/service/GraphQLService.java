@@ -22,7 +22,7 @@ import java.util.Map;
 @Service
 public class GraphQLService {
     @Value("classpath:schema.graphql")
-    private Resource resource;
+    private Resource schema;
 
     @Autowired
     GraphQLDataFetchers graphQLDataFetcher;
@@ -31,7 +31,7 @@ public class GraphQLService {
 
     @PostConstruct
     public void loadSchema() throws IOException {
-        File schemaFile = resource.getFile();
+        File schemaFile = schema.getFile();
 
         TypeDefinitionRegistry typeRegistry = new SchemaParser().parse(schemaFile);
         RuntimeWiring wiring = buildRuntimeWiring();
@@ -40,14 +40,26 @@ public class GraphQLService {
     }
 
     private RuntimeWiring buildRuntimeWiring() {
-        Map<String, DataFetcher> dataFetchers = new HashMap<>();
-        dataFetchers.put("board", graphQLDataFetcher.getBoardByIdDataFetcher());
-        dataFetchers.put("card", graphQLDataFetcher.getCardByIdDataFetcher());
-        dataFetchers.put("customer", graphQLDataFetcher.getCustomerByIdDataFetcher());
+        Map<String, DataFetcher> queryDataFetchers = new HashMap<>();
+        queryDataFetchers.put("board", graphQLDataFetcher.getBoardByIdDataFetcher());
+        queryDataFetchers.put("card", graphQLDataFetcher.getCardByIdDataFetcher());
+        queryDataFetchers.put("customer", graphQLDataFetcher.getCustomerByIdDataFetcher());
+
+        Map<String, DataFetcher> mutationDataFetchers = new HashMap<>();
+        mutationDataFetchers.put("addCustomer", graphQLDataFetcher.addCustomer());
+        mutationDataFetchers.put("moveCardToOtherList", graphQLDataFetcher.moveCardToOtherList());
+        mutationDataFetchers.put("moveCardAboveOtherCard", graphQLDataFetcher.moveCardAboveOtherCard());
 
         return RuntimeWiring.newRuntimeWiring()
                 .type(TypeRuntimeWiring.newTypeWiring("Query")
-                        .dataFetchers(dataFetchers)).build();
+                        .dataFetchers(queryDataFetchers))
+                .type(TypeRuntimeWiring.newTypeWiring("Mutation")
+                        .dataFetchers(mutationDataFetchers))
+                .type("Customer", typeWiring -> typeWiring)
+                .type("Card", typeWiring -> typeWiring)
+                .type("CardList", typeWiring -> typeWiring)
+                .type("Board", typeWiring -> typeWiring)
+                .build();
     }
 
     public GraphQL getGraphQL() {

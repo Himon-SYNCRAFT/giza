@@ -32,8 +32,6 @@ public class BoardService implements CrudService<Board> {
 
     @Transactional
     public Optional<Board> get(int boardId) {
-        System.out.println("boardId");
-        System.out.println(boardId);
         return boardRepository.findById(boardId);
     }
 
