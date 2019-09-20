@@ -21,6 +21,15 @@ type Mutation {
 
     addBoard(input: BoardInput!): Board
     updateBoard(id: ID!, input: BoardInput!): Board
+
+    addCardList(input: CardListInput!): CardList
+    updateCardList(id: ID!, input: CardListInput!): CardList
+}
+
+input CardListInput {
+    name: String,
+    ownerId: ID
+    boardId: ID
 }
 
 input CustomerInput {
@@ -62,7 +71,8 @@ type CardList {
     id: ID,
     name: String,
     cards: [Card],
-    owner: Customer
+    owner: Customer,
+    boardId: ID,
 }
 
 type Board {

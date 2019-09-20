@@ -7,6 +7,7 @@ import pl.syncraft.giza.entity.Card;
 import pl.syncraft.giza.entity.CardList;
 import pl.syncraft.giza.entity.Customer;
 
+import java.util.LinkedHashMap;
 import java.util.Optional;
 
 /**
@@ -99,6 +100,102 @@ public class GraphQLDataFetchers {
 
             int boardId = optionalCardList.get().getBoardId();
             return boardService.get(boardId).orElse(null);
+        };
+    }
+
+    public DataFetcher addCard() {
+        return e -> {
+            LinkedHashMap<String, Object> input = e.getArgument("input");
+
+            String title = (String) input.get("title");
+            String description = (String) input.get("description");
+            int cardListId = (int) input.get("cardListId");
+            int ownerId = (int) input.get("ownerId");
+
+            Card card = new Card();
+            card.setTitle(title);
+            card.setDescription(description);
+            card.setCardListId(cardListId);
+
+            Optional<Customer> owner = customerService.get(ownerId);
+            owner.ifPresent(card::setOwner);
+
+            cardService.save(card);
+            return card;
+        };
+    }
+
+    public DataFetcher updateCard() {
+        return e -> {
+            int cardId = Integer.parseInt(e.getArgument("id"));
+            LinkedHashMap<String, Object> input = e.getArgument("input");
+
+            String title = (String) input.get("title");
+            String description = (String) input.get("description");
+            int cardListId = Integer.parseInt((String)input.get("cardListId"));
+            int ownerId = Integer.parseInt((String)input.get("ownerId"));
+
+            Optional<Card> optionalCard = cardService.get(cardId);
+
+            if (!optionalCard.isPresent()) {
+                return null;
+            }
+
+            Card card = optionalCard.get();
+            card.setTitle(title);
+            card.setDescription(description);
+            card.setCardListId(cardListId);
+
+            Optional<Customer> owner = customerService.get(ownerId);
+            owner.ifPresent(card::setOwner);
+
+            cardService.save(card);
+            return card;
+        };
+    }
+
+    public DataFetcher addCardList() {
+        return e -> {
+            LinkedHashMap<String, Object> input = e.getArgument("input");
+
+            String name = (String) input.get("name");
+            int boardId = Integer.parseInt((String)input.get("boardId"));
+            int ownerId = Integer.parseInt((String)input.get("ownerId"));
+
+            CardList cardList = new CardList();
+            cardList.setName(name);
+            cardList.setBoardId(boardId);
+
+            Optional<Customer> owner = customerService.get(ownerId);
+            owner.ifPresent(cardList::setOwner);
+
+            cardListService.save(cardList);
+            return cardList;
+        };
+    }
+
+    public DataFetcher updateCardList() {
+        return e -> {
+            int cardListId = e.getArgument("id");
+            String name = e.getArgument("name");
+            int ownerId = e.getArgument("ownerId");
+            int boardId = e.getArgument("boardId");
+
+            Optional<CardList> optionalCardList = cardListService.get(cardListId);
+
+            if (!optionalCardList.isPresent()) {
+                return null;
+            }
+
+            CardList cardList = optionalCardList.get();
+            cardList.setName(name);
+            cardList.setBoardId(boardId);
+
+            Optional<Customer> owner = customerService.get(ownerId);
+            owner.ifPresent(cardList::setOwner);
+
+            cardListService.save(cardList);
+            return cardList;
         };
     }
 }

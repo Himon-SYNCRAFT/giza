@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Daniel Zawlocki
@@ -59,5 +57,11 @@ public class CardList {
         }
 
         setBoardId(board.getId());
+    }
+
+    public List<Card> getCards() {
+        List<Card> cardsAsList = new ArrayList<>(cards);
+        cardsAsList.sort((a, b) -> a.getSort() - b.getSort());
+        return cardsAsList;
     }
 }

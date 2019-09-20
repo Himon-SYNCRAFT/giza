@@ -48,7 +48,6 @@ public class Card {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar updatedAt;
 
-
     public void setCardList(@NonNull CardList cardList) {
         if (cardList.getId() == null) {
             throw new NullPointerException("cardListId should not be null");

@@ -49,6 +49,10 @@ public class GraphQLService {
         mutationDataFetchers.put("addCustomer", graphQLDataFetcher.addCustomer());
         mutationDataFetchers.put("moveCardToOtherList", graphQLDataFetcher.moveCardToOtherList());
         mutationDataFetchers.put("moveCardAboveOtherCard", graphQLDataFetcher.moveCardAboveOtherCard());
+        mutationDataFetchers.put("addCardList", graphQLDataFetcher.addCardList());
+        mutationDataFetchers.put("updateCardList", graphQLDataFetcher.updateCardList());
+        mutationDataFetchers.put("addCard", graphQLDataFetcher.addCard());
+        mutationDataFetchers.put("updateCard", graphQLDataFetcher.updateCard());
 
         return RuntimeWiring.newRuntimeWiring()
                 .type(TypeRuntimeWiring.newTypeWiring("Query")

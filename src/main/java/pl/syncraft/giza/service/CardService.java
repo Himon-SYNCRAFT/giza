@@ -33,7 +33,7 @@ public class CardService implements CrudService<Card> {
 
         Optional<CardList> optionalCardList = cardListService.get(card.getCardListId());
 
-        Set<Card> cards;
+        List<Card> cards;
 
         if (card.getSort() == null) {
             int maxSort = 0;
